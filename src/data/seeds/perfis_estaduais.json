@@ -1,0 +1,48 @@
+[
+  {
+    "id": "perfil_ma_2026",
+    "uf": "MA",
+    "nome": "Maranhão — Res. 1.020/2025 / Portaria Detran-MA 127/2026",
+    "versao_norma": "1.0.0",
+    "limite_aprovacao": 10,
+    "peso_leve": 1,
+    "peso_media": 2,
+    "peso_grave": 4,
+    "peso_gravissima": 6,
+    "limite_incapacidade_tecnica": 2,
+    "primeira_incapacidade_gera_leve": 1,
+    "tempo_minimo_segundos": null,
+    "ativo": 1
+  },
+  {
+    "id": "perfil_ms_2026",
+    "uf": "MS",
+    "nome": "Mato Grosso do Sul — Portaria Detran-MS 214/2026",
+    "versao_norma": "1.0.0",
+    "limite_aprovacao": 10,
+    "peso_leve": 1,
+    "peso_media": 2,
+    "peso_grave": 4,
+    "peso_gravissima": 6,
+    "limite_incapacidade_tecnica": 2,
+    "primeira_incapacidade_gera_leve": 1,
+    "tempo_minimo_segundos": 600,
+    "ativo": 1
+  },
+  {
+    "id": "perfil_sp_2026",
+    "uf": "SP",
+    "nome": "São Paulo — Res. Contran 1.020/2025",
+    "versao_norma": "1.0.0",
+    "limite_aprovacao": 10,
+    "peso_leve": 1,
+    "peso_media": 2,
+    "peso_grave": 4,
+    "peso_gravissima": 6,
+    "limite_incapacidade_tecnica": 2,
+    "primeira_incapacidade_gera_leve": 1,
+    "tempo_minimo_segundos": null,
+    "ativo": 1
+  }
+]
+

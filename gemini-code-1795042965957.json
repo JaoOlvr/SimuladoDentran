@@ -1,0 +1,457 @@
+{
+  "versao_schema": "1.0.0",
+  "data_referencia": "2026-11-18",
+  "norma_base": "Resolução CONTRAN nº 1.020/2025 + MBEDV (Senatran 2026) + CTB",
+  "infracoes": [
+    {
+      "id": "ctb_208",
+      "artigo_ctb": "Art. 208",
+      "descricao": "Avançar o sinal vermelho do semáforo ou o de parada obrigatória (PARE)",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "sinalizacao",
+      "fonte": "CTB / Res. Contran 1.020/2025 / Portaria Detran-MS 214/2026"
+    },
+    {
+      "id": "ctb_186_ii",
+      "artigo_ctb": "Art. 186, II",
+      "descricao": "Transitar pela contramão de direção em vias com sinalização de regulamentação de sentido único de circulação",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "faixa_e_posicionamento",
+      "fonte": "CTB / Portaria Detran-MS 214/2026"
+    },
+    {
+      "id": "ctb_214_i_ii_iii",
+      "artigo_ctb": "Art. 214, I, II e III",
+      "descricao": "Deixar de dar preferência a pedestre ou veículo não motorizado na faixa, que não concluiu travessia ou a crianças, idosos, gestantes e PCD",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "preferencia",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_175",
+      "artigo_ctb": "Art. 175",
+      "descricao": "Demonstrar ou exibir manobra perigosa, arrancada brusca, derrapagem ou frenagem com deslizamento de pneus",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "conducao_e_controle",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_162_vi",
+      "artigo_ctb": "Art. 162, VI",
+      "descricao": "Dirigir sem usar lentes corretoras de visão, aparelho auxiliar de audição, prótese física ou adaptações impostas na CNH",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "equipamentos",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_218_iii",
+      "artigo_ctb": "Art. 218, III",
+      "descricao": "Transitar em velocidade superior à máxima permitida em mais de 50%",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "velocidade",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_220_xiv",
+      "artigo_ctb": "Art. 220, XIV",
+      "descricao": "Deixar de reduzir a velocidade de forma compatível com a segurança próximo a escolas, hospitais ou intensa movimentação de pedestres",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "velocidade",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_193",
+      "artigo_ctb": "Art. 193",
+      "descricao": "Transitar com o veículo em calçadas, passeios, passarelas, ciclovias, ciclofaixas, ilhas, refúgios ou canteiros centrais",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "faixa_e_posicionamento",
+      "fonte": "CTB / Res. Contran 1.020/2025"
+    },
+    {
+      "id": "ctb_203",
+      "artigo_ctb": "Art. 203",
+      "descricao": "Ultrapassar pela contramão em curvas, aclives/declives sem visibilidade, faixas de pedestres, pontes ou faixa contínua amarela",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "faixa_e_posicionamento",
+      "fonte": "CTB / Res. Contran 1.020/2025"
+    },
+    {
+      "id": "ctb_252_pu",
+      "artigo_ctb": "Art. 252, Parágrafo Único",
+      "descricao": "Dirigir segurando ou manuseando telefone celular",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "conducao_e_controle",
+      "fonte": "CTB (Lei 13.281/2016)"
+    },
+    {
+      "id": "ctb_181_xx",
+      "artigo_ctb": "Art. 181, XX",
+      "descricao": "Estacionar nas vagas reservadas às pessoas com deficiência ou idosos, sem credencial",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "estacionamento",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_244_i",
+      "artigo_ctb": "Art. 244, I",
+      "descricao": "Conduzir motocicleta, motoneta ou ciclomotor sem capacete de segurança, com cinta jugular solta ou sem vestuário adequado",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A"],
+      "agrupamento_ux": "equipamentos",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_244_iii",
+      "artigo_ctb": "Art. 244, III",
+      "descricao": "Conduzir motocicleta fazendo malabarismo ou equilibrando-se apenas em uma roda",
+      "natureza": "gravissima",
+      "pontos": 6,
+      "categorias_aplicaveis": ["A"],
+      "agrupamento_ux": "conducao_e_controle",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_196",
+      "artigo_ctb": "Art. 196",
+      "descricao": "Deixar de indicar com antecedência (seta ou gesto) o início da marcha, parada, mudança de direção ou de faixa",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "sinalizacao",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_192",
+      "artigo_ctb": "Art. 192",
+      "descricao": "Deixar de guardar distância de segurança lateral e frontal entre o veículo e os demais, bem como em relação ao bordo da pista",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "faixa_e_posicionamento",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_186_i",
+      "artigo_ctb": "Art. 186, I",
+      "descricao": "Transitar pela contramão de direção em vias com duplo sentido de circulação, salvo para ultrapassagem permitida",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "faixa_e_posicionamento",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_167",
+      "artigo_ctb": "Art. 167",
+      "descricao": "Deixar o condutor ou passageiro de usar o cinto de segurança",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["B", "C", "D", "E"],
+      "agrupamento_ux": "equipamentos",
+      "fonte": "CTB / Res. Contran 1.020/2025"
+    },
+    {
+      "id": "ctb_215_i_ii",
+      "artigo_ctb": "Art. 215, I e II",
+      "descricao": "Deixar de dar preferência de passagem em interseção não sinalizada, rotatória ou ao entrar em via preferencial",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "preferencia",
+      "fonte": "CTB / Res. Contran 1.020/2025"
+    },
+    {
+      "id": "ctb_214_iv_v",
+      "artigo_ctb": "Art. 214, IV e V",
+      "descricao": "Deixar de dar preferência a pedestre que já iniciou travessia sem faixa ou atravessando a via transversal",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "preferencia",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_218_ii",
+      "artigo_ctb": "Art. 218, II",
+      "descricao": "Transitar em velocidade superior à máxima permitida em mais de 20% até 50%",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "velocidade",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_207",
+      "artigo_ctb": "Art. 207",
+      "descricao": "Executar operação de conversão à direita ou à esquerda em locais proibidos pela sinalização",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "sinalizacao",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_204",
+      "artigo_ctb": "Art. 204",
+      "descricao": "Deixar de parar no acostamento à direita para aguardar oportunidade de cruzar a pista ou entrar à esquerda sem retorno",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "faixa_e_posicionamento",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_181_iii",
+      "artigo_ctb": "Art. 181, III",
+      "descricao": "Estacionar o veículo afastado da guia da calçada (meio-fio) a mais de um metro",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "estacionamento",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_181_viii",
+      "artigo_ctb": "Art. 181, VIII",
+      "descricao": "Estacionar no passeio, sobre faixa destinada a pedestre, ciclovia ou ciclofaixa",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "estacionamento",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_181_xvii",
+      "artigo_ctb": "Art. 181, XVII",
+      "descricao": "Estacionar em desacordo com as condições regulamentadas especificamente pela sinalização",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "estacionamento",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_220_x",
+      "artigo_ctb": "Art. 220, X",
+      "descricao": "Deixar de reduzir a velocidade de forma compatível com a segurança em pavimento escorregadio, defeituoso ou avariado",
+      "natureza": "grave",
+      "pontos": 4,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "velocidade",
+      "fonte": "CTB / DOE-MS 12.053 (20/01/2026)"
+    },
+    {
+      "id": "ctb_183",
+      "artigo_ctb": "Art. 183",
+      "descricao": "Parar o veículo sobre a faixa de pedestres na mudança de sinal luminoso",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "sinalizacao",
+      "fonte": "CTB / Portaria Detran-MS 214/2026"
+    },
+    {
+      "id": "ctb_218_i",
+      "artigo_ctb": "Art. 218, I",
+      "descricao": "Transitar em velocidade superior à máxima permitida em até 20%",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "velocidade",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_219",
+      "artigo_ctb": "Art. 219",
+      "descricao": "Transitar com o veículo em velocidade inferior à metade da máxima estabelecida para a via, retardando ou obstruindo o trânsito",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "velocidade",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_185_i_ii",
+      "artigo_ctb": "Art. 185, I e II",
+      "descricao": "Deixar de conservar o veículo na faixa a ele destinada ou nas faixas da direita (veículos mais lentos)",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "faixa_e_posicionamento",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_181_i",
+      "artigo_ctb": "Art. 181, I",
+      "descricao": "Estacionar nas esquinas e a menos de cinco metros do bordo do alinhamento da via transversal",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "estacionamento",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_181_ix",
+      "artigo_ctb": "Art. 181, IX",
+      "descricao": "Estacionar onde houver guia de calçada (meio-fio) rebaixada destinada à entrada ou saída de veículos",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "estacionamento",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_181_xviii",
+      "artigo_ctb": "Art. 181, XVIII",
+      "descricao": "Estacionar em locais e horários proibidos especificamente pela sinalização (placa Proibido Estacionar)",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "estacionamento",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_200",
+      "artigo_ctb": "Art. 200",
+      "descricao": "Ultrapassar pela direita, salvo quando o veículo da frente estiver colocado na faixa apropriada e der sinal de entrar à esquerda",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "faixa_e_posicionamento",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_252_iv",
+      "artigo_ctb": "Art. 252, IV",
+      "descricao": "Dirigir usando calçado que não se firme nos pés ou que comprometa a utilização dos pedais",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "equipamentos",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_252_v",
+      "artigo_ctb": "Art. 252, V",
+      "descricao": "Dirigir com apenas uma das mãos, exceto quando deva fazer sinais regulamentares, mudar a marcha ou acionar equipamentos",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "conducao_e_controle",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_252_vi",
+      "artigo_ctb": "Art. 252, VI",
+      "descricao": "Dirigir utilizando fones nos ouvidos conectados a aparelhagem sonora ou de telefone celular",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "equipamentos",
+      "fonte": "CTB / Portaria Detran-MS 214/2026"
+    },
+    {
+      "id": "ctb_250_i",
+      "artigo_ctb": "Art. 250, I",
+      "descricao": "Deixar de manter acesa a luz baixa à noite, em túneis, sob chuva, neblina ou cerração",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["B", "C", "D", "E"],
+      "agrupamento_ux": "equipamentos",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_244_iv",
+      "artigo_ctb": "Art. 244, IV",
+      "descricao": "Conduzir motocicleta, motoneta ou ciclomotor com os faróis apagados",
+      "natureza": "media",
+      "pontos": 2,
+      "categorias_aplicaveis": ["A"],
+      "agrupamento_ux": "equipamentos",
+      "fonte": "CTB (Lei 14.071/2020)"
+    },
+    {
+      "id": "ctb_169",
+      "artigo_ctb": "Art. 169",
+      "descricao": "Dirigir sem atenção ou sem os cuidados indispensáveis à segurança (inclui erros operacionais leves como apagar o motor, erro de marcha/embreagem ou retrovisor desajustado)",
+      "natureza": "leve",
+      "pontos": 1,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "conducao_e_controle",
+      "fonte": "CTB / MBEDV (2026) / Portaria Detran-MS 214/2026"
+    },
+    {
+      "id": "ctb_181_ii",
+      "artigo_ctb": "Art. 181, II",
+      "descricao": "Estacionar o veículo afastado da guia da calçada (meio-fio) de cinquenta centímetros a um metro",
+      "natureza": "leve",
+      "pontos": 1,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "estacionamento",
+      "fonte": "CTB / Portaria Detran-MS 214/2026"
+    },
+    {
+      "id": "ctb_182_ii",
+      "artigo_ctb": "Art. 182, II",
+      "descricao": "Parar o veículo afastado da guia da calçada (meio-fio) de cinquenta centímetros a um metro",
+      "natureza": "leve",
+      "pontos": 1,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "estacionamento",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_227_i",
+      "artigo_ctb": "Art. 227, I",
+      "descricao": "Usar a buzina em situação que não a de simples toque breve como advertência ao pedestre ou a condutores",
+      "natureza": "leve",
+      "pontos": 1,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "equipamentos",
+      "fonte": "CTB / Portaria Detran-MS 214/2026"
+    },
+    {
+      "id": "ctb_224",
+      "artigo_ctb": "Art. 224",
+      "descricao": "Fazer uso do facho de luz alta dos faróis em vias providas de iluminação pública",
+      "natureza": "leve",
+      "pontos": 1,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "equipamentos",
+      "fonte": "CTB"
+    },
+    {
+      "id": "ctb_184_i",
+      "artigo_ctb": "Art. 184, I",
+      "descricao": "Transitar com o veículo na faixa ou pista da direita regulamentada como de circulação exclusiva para determinado tipo de veículo",
+      "natureza": "leve",
+      "pontos": 1,
+      "categorias_aplicaveis": ["A", "B", "C", "D", "E"],
+      "agrupamento_ux": "faixa_e_posicionamento",
+      "fonte": "CTB"
+    }
+  ]
+}
