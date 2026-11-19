@@ -168,3 +168,4 @@ export type NovoSimuladoEventoDb = typeof simulado_eventos.$inferInsert;
 
 export type SyncQueueDb = typeof sync_queue.$inferSelect;
 export type NovoSyncQueueDb = typeof sync_queue.$inferInsert;
+

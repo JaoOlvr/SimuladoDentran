@@ -59,3 +59,4 @@ export class CatalogoRepository {
 }
 
 export const catalogoRepository = new CatalogoRepository();
+

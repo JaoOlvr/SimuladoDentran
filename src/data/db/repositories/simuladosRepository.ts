@@ -58,3 +58,4 @@ export class SimuladosRepository {
 }
 
 export const simuladosRepository = new SimuladosRepository();
+

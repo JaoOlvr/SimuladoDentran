@@ -37,3 +37,4 @@ export class SyncQueueService {
 }
 
 export const syncQueueService = new SyncQueueService();
+

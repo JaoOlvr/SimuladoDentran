@@ -306,3 +306,4 @@ describe('Fase 2 — Banco Local Offline (SQLite + Drizzle) e Repositórios', ()
     });
   });
 });
+

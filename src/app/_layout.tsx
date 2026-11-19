@@ -5,27 +5,63 @@ import React from 'react';
 export default function RootLayout() {
   return (
     <>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
       <Stack
         screenOptions={{
           headerStyle: {
             backgroundColor: '#1E40AF',
           },
-          headerTintColor: '#ffffff',
+          headerTintColor: '#FFFFFF',
           headerTitleStyle: {
-            fontWeight: 'bold',
+            fontWeight: '800',
           },
         }}
       >
         <Stack.Screen
           name="index"
           options={{
-            title: 'SimulaDetran',
             headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="alunos/novo"
+          options={{
+            title: 'Novo Aluno',
+          }}
+        />
+        <Stack.Screen
+          name="alunos/[id]"
+          options={{
+            title: 'Perfil do Aluno',
+          }}
+        />
+        <Stack.Screen
+          name="simulado/novo"
+          options={{
+            title: 'Preparar Simulado',
+          }}
+        />
+        <Stack.Screen
+          name="simulado/[id]"
+          options={{
+            title: 'Simulado Prático',
+            headerBackVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="simulado/[id]/resultado"
+          options={{
+            title: 'Resultado Final',
+            headerBackVisible: false,
           }}
         />
       </Stack>
     </>
   );
 }
-
