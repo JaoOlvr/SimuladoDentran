@@ -4,6 +4,8 @@ module.exports = {
   testEnvironment: 'node',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^expo-sqlite$': '<rootDir>/__mocks__/expo-sqlite.ts',
+    '^drizzle-orm/expo-sqlite$': '<rootDir>/__mocks__/drizzle-orm/expo-sqlite.ts',
   },
   testMatch: [
     '**/__tests__/**/*.test.ts',
