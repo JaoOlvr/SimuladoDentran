@@ -128,6 +128,14 @@ export default function AlunoDetalhesScreen() {
           variant="primary"
           minHeight={60}
           onPress={handleIniciarSimulado}
+          style={{ marginBottom: 12 }}
+        />
+
+        <BigActionButton
+          title="📊 Ver Evolução e Top 3 Erros"
+          variant="secondary"
+          minHeight={52}
+          onPress={() => router.push(`/alunos/${aluno.id}/evolucao`)}
           style={{ marginBottom: 24 }}
         />
 
@@ -330,3 +338,4 @@ const styles = StyleSheet.create({
     borderTopColor: '#E2E8F0',
   },
 });
+

@@ -44,3 +44,4 @@ export async function triggerHapticWarning(): Promise<void> {
     await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
   } catch {}
 }
+

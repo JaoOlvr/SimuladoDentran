@@ -122,3 +122,4 @@ describe('Fase 3 — Store do Simulado e Fluxo Core de Avaliação', () => {
     expect(estadoFinal.pontos_totais).toBe(4);
   });
 });
+

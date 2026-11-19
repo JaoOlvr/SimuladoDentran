@@ -42,6 +42,12 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen
+          name="alunos/[id]/evolucao"
+          options={{
+            title: 'Evolução e Estatísticas',
+          }}
+        />
+        <Stack.Screen
           name="simulado/novo"
           options={{
             title: 'Preparar Simulado',

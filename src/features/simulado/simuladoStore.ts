@@ -421,3 +421,4 @@ export const useSimuladoStore = create<SimuladoStoreState>((set, get) => ({
     return estadoFinal;
   },
 }));
+

@@ -13,6 +13,9 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { useSimuladoStore } from '../../../features/simulado/simuladoStore';
 import { BigActionButton } from '../../../components/BigActionButton';
 
+import { relatorioService } from '../../../features/relatorios/relatorioService';
+import { getPerfilPorUf } from '../../../core/rules/loader';
+
 export default function ResultadoSimuladoScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
@@ -28,6 +31,7 @@ export default function ResultadoSimuladoScreen() {
 
   const [observacoes, setObservacoes] = useState('');
   const [salvando, setSalvando] = useState(false);
+  const [gerandoPdf, setGerandoPdf] = useState(false);
 
   useEffect(() => {
     if (id && (!simuladoAtual || simuladoAtual.id !== id)) {
@@ -51,6 +55,39 @@ export default function ResultadoSimuladoScreen() {
       Alert.alert('Erro', 'Não foi possível salvar as observações.');
     } finally {
       setSalvando(false);
+    }
+  };
+
+  const handleGerarECompartilharPdf = async () => {
+    if (!simuladoAtual) return;
+    setGerandoPdf(true);
+    try {
+      // Salva observações antes se houver algo digitado
+      if (observacoes !== simuladoAtual.observacoes_instrutor) {
+        await finalizarSimulado(observacoes);
+      }
+
+      const perfil = getPerfilPorUf('MA');
+      const uri = await relatorioService.gerarPdf({
+        simulado: {
+          ...simuladoAtual,
+          observacoes_instrutor: observacoes || simuladoAtual.observacoes_instrutor,
+        },
+        aluno: alunoAtual,
+        perfil,
+        eventos,
+        nomeInstrutor: 'Instrutor Credenciado Detran-MA',
+      });
+
+      await relatorioService.compartilhar(
+        uri,
+        alunoAtual ? alunoAtual.nome : 'Simulado Rápido'
+      );
+    } catch (e) {
+      console.error(e);
+      Alert.alert('Erro', 'Não foi possível gerar ou compartilhar o PDF.');
+    } finally {
+      setGerandoPdf(false);
     }
   };
 
@@ -195,15 +232,11 @@ export default function ResultadoSimuladoScreen() {
         {/* Botões de Ação */}
         <View style={styles.actionButtons}>
           <BigActionButton
-            title="Compartilhar Relatório (Fase 4)"
+            title="Gerar PDF e Enviar no WhatsApp"
             variant="success"
-            minHeight={58}
-            onPress={() => {
-              Alert.alert(
-                'Relatório e PDF (Fase 4)',
-                'A geração de PDF e compartilhamento direto no WhatsApp será ativada na Fase 4.'
-              );
-            }}
+            minHeight={60}
+            loading={gerandoPdf}
+            onPress={handleGerarECompartilharPdf}
             style={{ marginBottom: 12 }}
           />
 
@@ -352,3 +385,4 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
 });
+
