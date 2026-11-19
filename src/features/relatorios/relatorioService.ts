@@ -30,3 +30,4 @@ export class RelatorioService {
 }
 
 export const relatorioService = new RelatorioService();
+

@@ -45,6 +45,14 @@ export default function TabLayout() {
           headerTitle: 'Gestão de Alunos',
         }}
       />
+      <Tabs.Screen
+        name="configuracoes"
+        options={{
+          title: 'Configurações',
+          tabBarLabel: 'Ajustes / LGPD',
+          headerTitle: 'Configurações e LGPD',
+        }}
+      />
     </Tabs>
   );
 }

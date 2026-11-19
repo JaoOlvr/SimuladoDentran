@@ -161,3 +161,4 @@ describe('Fase 4 — Geração de Relatório PDF e Compartilhamento', () => {
     );
   });
 });
+

@@ -337,3 +337,4 @@ export function gerarHtmlRelatorio({
 </html>
   `.trim();
 }
+

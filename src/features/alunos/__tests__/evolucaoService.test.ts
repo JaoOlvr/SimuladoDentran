@@ -204,3 +204,4 @@ describe('Fase 4 — Serviço de Evolução do Aluno e Top Erros', () => {
     expect(evolucao.topErros[2].total_ocorrencias).toBe(1);
   });
 });
+
