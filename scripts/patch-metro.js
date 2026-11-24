@@ -140,4 +140,27 @@ for (const file of watchTsFiles) {
   }
 }
 
+// 6. Corrigir sourceMapString (Cannot read properties of undefined reading 'sourceMapString')
+const serializerFiles = [
+  path.join(nodeModules, '@expo/metro-config/build/serializer/serializeChunks.js'),
+  path.join(nodeModules, '@expo/metro-config/build/serializer/withExpoSerializers.js')
+];
+for (const file of serializerFiles) {
+  if (fs.existsSync(file)) {
+    let content = fs.readFileSync(file, 'utf8');
+    if (content.includes('sourceMapString_1.default')) {
+      content = content.replace(
+        /const\s*\{\s*sourceMapString\s*\}\s*=\s*sourceMapString_1\.default;/g,
+        `const sourceMapString = (sourceMapString_1 && sourceMapString_1.default && sourceMapString_1.default.sourceMapString) || (sourceMapString_1 && sourceMapString_1.sourceMapString) || (sourceMapString_1 && sourceMapString_1.default) || sourceMapString_1;`
+      );
+      content = content.replace(
+        /sourceMapString_1\.default\.sourceMapString/g,
+        `((sourceMapString_1 && sourceMapString_1.default && sourceMapString_1.default.sourceMapString) || (sourceMapString_1 && sourceMapString_1.sourceMapString) || (sourceMapString_1 && sourceMapString_1.default) || sourceMapString_1)`
+      );
+      fs.writeFileSync(file, content, 'utf8');
+      console.log(`[patch-metro] Aplicado patch de sourceMapString em: ${path.basename(file)}`);
+    }
+  }
+}
+
 console.log('[patch-metro] Todos os patches foram aplicados com sucesso!');
