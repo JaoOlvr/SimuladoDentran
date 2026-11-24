@@ -22,3 +22,4 @@ export function getSupabaseClient(): SupabaseClient {
 export function isMockSupabase(): boolean {
   return SUPABASE_URL.includes('mock');
 }
+

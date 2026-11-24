@@ -114,3 +114,4 @@ export const useAuthStore = create<AuthStoreState>((set) => ({
 
   setUfPadrao: (uf: string) => set({ ufPadrao: uf.toUpperCase() }),
 }));
+

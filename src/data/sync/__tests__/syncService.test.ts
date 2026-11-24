@@ -84,3 +84,4 @@ describe('Fase 5 — Auth, LGPD e Sincronizador Offline Supabase', () => {
     });
   });
 });
+

@@ -25,7 +25,8 @@
     },
     "plugins": [
       "expo-router",
-      "expo-sqlite"
+      "expo-sqlite",
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true
@@ -33,4 +34,3 @@
     "scheme": "simuladetran"
   }
 }
-

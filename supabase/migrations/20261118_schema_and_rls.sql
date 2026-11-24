@@ -166,3 +166,4 @@ CREATE POLICY "Acesso aos eventos do simulado da organizacao"
       WHERE i.id = auth.uid()
     )
   );
+
