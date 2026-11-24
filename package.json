@@ -13,6 +13,7 @@
     "test:scoring": "jest src/core/scoring",
     "db:generate": "drizzle-kit generate",
     "typecheck": "tsc --noEmit",
+    "postinstall": "node scripts/patch-metro.js",
     "build:apk": "eas build -p android --profile preview",
     "build:apk:local": "expo prebuild --platform android && cd android && ./gradlew assembleRelease"
   },

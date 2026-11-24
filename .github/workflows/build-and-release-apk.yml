@@ -55,6 +55,9 @@ jobs:
       - name: 📦 Instalar Dependências
         run: npm install --prefer-offline --no-audit
 
+      - name: 🩹 Aplicar Patch de Compatibilidade do Metro
+        run: node scripts/patch-metro.js
+
       - name: ⚙️ Executar Expo Prebuild Android
         run: npx expo prebuild --platform android --clean
 
