@@ -15,13 +15,16 @@ function replaceInFile(filePath, search, replacement) {
   }
 }
 
-// 1. Remover "exports" de todos os pacotes metro* em node_modules
-function removeExports(baseDir) {
+// 1. Remover "exports" de todos os pacotes metro* em node_modules e criar symlink/cópia de private -> src
+function setupMetroPackages(baseDir) {
   if (!fs.existsSync(baseDir)) return;
   const entries = fs.readdirSync(baseDir, { withFileTypes: true });
   for (const entry of entries) {
     if (entry.isDirectory() && entry.name.startsWith('metro')) {
-      const pkgPath = path.join(baseDir, entry.name, 'package.json');
+      const pkgDir = path.join(baseDir, entry.name);
+      const pkgPath = path.join(pkgDir, 'package.json');
+      
+      // Remover exports restritivo
       if (fs.existsSync(pkgPath)) {
         try {
           const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
@@ -34,6 +37,23 @@ function removeExports(baseDir) {
           console.error(`[patch-metro] Falha ao processar ${pkgPath}:`, e.message);
         }
       }
+
+      // Criar symlink ou cópia de private -> src para suportar tanto /private/* quanto /src/*
+      const srcDir = path.join(pkgDir, 'src');
+      const privDir = path.join(pkgDir, 'private');
+      if (fs.existsSync(srcDir) && !fs.existsSync(privDir)) {
+        try {
+          fs.symlinkSync('src', privDir, 'dir');
+          console.log(`[patch-metro] Criado symlink private -> src para: ${entry.name}`);
+        } catch (e) {
+          try {
+            fs.cpSync(srcDir, privDir, { recursive: true });
+            console.log(`[patch-metro] Copiado src para private em: ${entry.name}`);
+          } catch (err2) {
+            console.error(`[patch-metro] Falha ao criar private para ${entry.name}:`, err2.message);
+          }
+        }
+      }
     }
   }
 }
@@ -41,8 +61,8 @@ function removeExports(baseDir) {
 const rootDir = path.join(__dirname, '..');
 const nodeModules = path.join(rootDir, 'node_modules');
 
-// 1. Desbloquear exports do Metro
-removeExports(nodeModules);
+// 1. Desbloquear exports e criar mapeamento private do Metro
+setupMetroPackages(nodeModules);
 
 // 2. Corrigir instantiateMetro.js (Cannot read properties of undefined reading 'push')
 const instantiateMetroPath = path.join(nodeModules, '@expo/cli/build/src/start/server/metro/instantiateMetro.js');
@@ -50,8 +70,21 @@ if (fs.existsSync(instantiateMetroPath)) {
   let content = fs.readFileSync(instantiateMetroPath, 'utf8');
   if (content.includes('this._logLines.push') || !content.includes('this._logLines = []')) {
     content = content.replace(
-      /constructor\s*\(\s*stream\s*\)\s*\{[\s\S]*?console\.info\s*=\s*sendLog;\s*\}/m,
-      `constructor(stream){\n        super(stream);\n        this._logLines = [];\n        const sendLog = (...args)=>{\n            if (typeof this.log === 'function') {\n                this.log(...args);\n            } else {\n                process.stdout.write(_nodeUtil().default.format(...args) + '\\n');\n            }\n        };\n        console.log = sendLog;\n        console.info = sendLog;\n    }`
+      /class LogRespectingTerminal[\s\S]*?constructor\s*\(\s*stream\s*\)\s*\{[\s\S]*?console\.info\s*=\s*sendLog;\s*\}/m,
+      `class LogRespectingTerminal extends _metroCore().Terminal {
+    constructor(stream){
+        super(stream);
+        this._logLines = [];
+        const sendLog = (...args)=>{
+            if (typeof this.log === 'function') {
+                this.log(...args);
+            } else {
+                process.stdout.write(_nodeUtil().default.format(...args) + '\\n');
+            }
+        };
+        console.log = sendLog;
+        console.info = sendLog;
+    }`
     );
     fs.writeFileSync(instantiateMetroPath, content, 'utf8');
     console.log('[patch-metro] Aplicado patch em instantiateMetro.js via regex');
