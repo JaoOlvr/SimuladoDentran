@@ -163,4 +163,29 @@ for (const file of serializerFiles) {
   }
 }
 
+// 7. Corrigir _bundle().default.save em exportEmbedAsync.js e bundle.flow.js
+const metroBundleFlow = path.join(nodeModules, 'metro/src/shared/output/bundle.flow.js');
+const metroBundleJs = path.join(nodeModules, 'metro/src/shared/output/bundle.js');
+for (const bFile of [metroBundleFlow, metroBundleJs]) {
+  if (fs.existsSync(bFile)) {
+    let bContent = fs.readFileSync(bFile, 'utf8');
+    if (!bContent.includes('exports.default = exports;')) {
+      bContent += '\nexports.default = exports;\n';
+      fs.writeFileSync(bFile, bContent, 'utf8');
+      console.log(`[patch-metro] Adicionado exports.default em: ${path.basename(bFile)}`);
+    }
+  }
+}
+
+const exportEmbedPath = path.join(nodeModules, '@expo/cli/build/src/export/embed/exportEmbedAsync.js');
+if (fs.existsSync(exportEmbedPath)) {
+  let content = fs.readFileSync(exportEmbedPath, 'utf8');
+  content = content.replace(
+    '_bundle().default.save(',
+    '(_bundle().default?.save ? _bundle().default : _bundle()).save('
+  );
+  fs.writeFileSync(exportEmbedPath, content, 'utf8');
+  console.log('[patch-metro] Aplicado patch em exportEmbedAsync.js');
+}
+
 console.log('[patch-metro] Todos os patches foram aplicados com sucesso!');
