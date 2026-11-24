@@ -46,14 +46,14 @@ jobs:
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
-      - name: 🟢 Configurar Node.js 20
+      - name: 🟢 Configurar Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: 📦 Instalar Dependências
-        run: npm ci
+        run: npm install --prefer-offline --no-audit
 
       - name: ⚙️ Executar Expo Prebuild Android
         run: npx expo prebuild --platform android --clean
