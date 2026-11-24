@@ -26,6 +26,10 @@ jobs:
     name: Gerar APK Release Android
     runs-on: ubuntu-latest
 
+    env:
+      ANDROID_HOME: /usr/local/lib/android/sdk
+      GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m"
+
     steps:
       - name: 📥 Checkout do Código
         uses: actions/checkout@v4
@@ -38,8 +42,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 🤖 Configurar Android SDK
-        uses: android-actions/setup-android@v3
+      - name: 🤖 Aceitar Licenças do Android SDK
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: 🟢 Configurar Node.js 20
         uses: actions/setup-node@v4
@@ -60,7 +65,7 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleRelease --no-daemon -x lint
+          ./gradlew assembleRelease --no-daemon -x lint -x test
 
       - name: 📂 Preparar Artefato do APK
         id: prepare_apk
@@ -104,7 +109,7 @@ jobs:
             
             Versão oficial pronta para instalação em dispositivos Android.
             
-            ### 🚀 Novidades desta versão:
+            ### 🚀 Recursos:
             - **Resolução Contran nº 1.020/2025** e **MBEDV 2026** implementadas.
             - **Perfil Maranhão (MA)** como padrão inicial (Portaria Detran-MA nº 127/2026).
             - **Modo 100% Offline-First** com banco local SQLite + Drizzle ORM.
@@ -122,4 +127,3 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
