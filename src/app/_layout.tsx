@@ -1,12 +1,16 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { View, StyleSheet } from 'react-native';
+
+export { ErrorBoundary } from 'expo-router';
 
 export default function RootLayout() {
   return (
-    <>
+    <View style={styles.container}>
       <StatusBar style="light" />
       <Stack
+        initialRouteName="(tabs)"
         screenOptions={{
           headerStyle: {
             backgroundColor: '#1E40AF',
@@ -15,14 +19,11 @@ export default function RootLayout() {
           headerTitleStyle: {
             fontWeight: '800',
           },
+          contentStyle: {
+            backgroundColor: '#F8FAFC',
+          },
         }}
       >
-        <Stack.Screen
-          name="index"
-          options={{
-            headerShown: false,
-          }}
-        />
         <Stack.Screen
           name="(tabs)"
           options={{
@@ -68,6 +69,13 @@ export default function RootLayout() {
           }}
         />
       </Stack>
-    </>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F8FAFC',
+  },
+});
