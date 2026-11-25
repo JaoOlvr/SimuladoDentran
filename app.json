@@ -2,11 +2,11 @@
   "expo": {
     "name": "SimulaDetran",
     "slug": "simuladetran",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
@@ -22,7 +22,7 @@
         "backgroundColor": "#1E40AF"
       },
       "package": "com.examesimulado.detran",
-      "versionCode": 3
+      "versionCode": 4
     },
     "plugins": [
       "expo-router",
