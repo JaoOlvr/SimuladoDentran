@@ -1,16 +1,18 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
 
 export { ErrorBoundary } from 'expo-router';
 
+export const unstable_settings = {
+  initialRouteName: '(tabs)',
+};
+
 export default function RootLayout() {
   return (
-    <View style={styles.container}>
+    <>
       <StatusBar style="light" />
       <Stack
-        initialRouteName="(tabs)"
         screenOptions={{
           headerStyle: {
             backgroundColor: '#1E40AF',
@@ -69,13 +71,6 @@ export default function RootLayout() {
           }}
         />
       </Stack>
-    </View>
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8FAFC',
-  },
-});
