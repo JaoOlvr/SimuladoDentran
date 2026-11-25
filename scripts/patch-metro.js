@@ -64,6 +64,41 @@ const nodeModules = path.join(rootDir, 'node_modules');
 // 1. Desbloquear exports e criar mapeamento private do Metro
 setupMetroPackages(nodeModules);
 
+// 1.1 Corrigir @babel/runtime (TypeError: t is not a function / _interopRequireDefault)
+// Metro com package exports resolve para ./helpers/esm/*.js em vez de CommonJS,
+// fazendo com que require('@babel/runtime/helpers/*') retorne { __esModule: true, default: fn }
+// em vez da função diretamente, causando crash na inicialização do React Native e tela branca.
+function patchBabelRuntime(baseDir) {
+  const runtimeHelpersDir = path.join(baseDir, '@babel/runtime/helpers');
+  const esmDir = path.join(runtimeHelpersDir, 'esm');
+  if (fs.existsSync(esmDir) && fs.existsSync(runtimeHelpersDir)) {
+    const files = fs.readdirSync(esmDir);
+    let patched = 0;
+    for (const f of files) {
+      const cjsFile = path.join(runtimeHelpersDir, f);
+      const esmFile = path.join(esmDir, f);
+      if (fs.existsSync(cjsFile)) {
+        fs.copyFileSync(cjsFile, esmFile);
+        patched++;
+      }
+    }
+    console.log(`[patch-metro] Sincronizados ${patched} helpers CommonJS em @babel/runtime/helpers/esm`);
+  }
+
+  const runtimePkg = path.join(baseDir, '@babel/runtime/package.json');
+  if (fs.existsSync(runtimePkg)) {
+    try {
+      let content = fs.readFileSync(runtimePkg, 'utf8');
+      content = content.replaceAll('"./helpers/esm/', '"./helpers/');
+      fs.writeFileSync(runtimePkg, content, 'utf8');
+      console.log('[patch-metro] Atualizado @babel/runtime/package.json para forçar helpers CJS');
+    } catch (e) {
+      console.error('[patch-metro] Falha ao atualizar package.json do @babel/runtime:', e.message);
+    }
+  }
+}
+patchBabelRuntime(nodeModules);
+
 // 2. Corrigir instantiateMetro.js (Cannot read properties of undefined reading 'push')
 const instantiateMetroPath = path.join(nodeModules, '@expo/cli/build/src/start/server/metro/instantiateMetro.js');
 if (fs.existsSync(instantiateMetroPath)) {
