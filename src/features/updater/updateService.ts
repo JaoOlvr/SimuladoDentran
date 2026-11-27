@@ -44,7 +44,7 @@ export function compararVersoes(v1: string, v2: string): number {
 }
 
 const GITHUB_REPO = 'JaoOlvr/SimuladoDentran';
-export const VERSAO_FALLBACK = '1.0.6';
+export const VERSAO_FALLBACK = '1.0.7';
 
 export class UpdateService {
   /**
