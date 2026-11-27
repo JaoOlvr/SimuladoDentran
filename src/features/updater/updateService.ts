@@ -16,7 +16,7 @@ export interface ReleaseInfo {
 }
 
 /**
- * Compara duas versões no formato semver (ex: '1.0.6' vs '1.0.5').
+ * Compara duas versões no formato semver (ex: '1.0.8' vs '1.0.7').
  * Retorna:
  *  1 se v1 > v2
  * -1 se v1 < v2
@@ -44,7 +44,11 @@ export function compararVersoes(v1: string, v2: string): number {
 }
 
 const GITHUB_REPO = 'JaoOlvr/SimuladoDentran';
-export const VERSAO_FALLBACK = '1.0.7';
+export const VERSAO_FALLBACK = '1.0.8';
+
+// Flags nativas do Intent Android
+// FLAG_GRANT_READ_URI_PERMISSION (1) | FLAG_ACTIVITY_NEW_TASK (0x10000000 = 268435456)
+const FLAGS_INTENT_INSTALACAO = 1 | 268435456;
 
 export class UpdateService {
   /**
@@ -79,7 +83,6 @@ export class UpdateService {
       const tagName: string = data.tag_name || '';
       const versaoNova = tagName.replace(/^v/, '');
 
-      // Procura o arquivo APK nos assets
       let apkUrl: string | null = null;
       let tamanhoMb: number | null = null;
 
@@ -117,19 +120,14 @@ export class UpdateService {
   }
 
   /**
-   * Faz o download do APK e dispara a tela de instalação nativa do Android.
+   * Faz o download do APK e salva no armazenamento local do app.
+   * Retorna a URI local do arquivo baixado.
    */
-  async baixarEInstalarApk(
+  async baixarApk(
     apkUrl: string,
     onProgress?: (progresso: number) => void
-  ): Promise<void> {
-    if (Platform.OS !== 'android') {
-      // No iOS ou Web abre o navegador
-      await Linking.openURL(apkUrl);
-      return;
-    }
-
-    const destinoApk = `${FileSystem.cacheDirectory}SimulaDetran-update.apk`;
+  ): Promise<string> {
+    const destinoApk = `${FileSystem.documentDirectory}SimulaDetran-update.apk`;
 
     // Remove arquivo anterior se existir
     try {
@@ -137,8 +135,8 @@ export class UpdateService {
       if (info.exists) {
         await FileSystem.deleteAsync(destinoApk, { idempotent: true });
       }
-    } catch (e) {
-      // Ignora erro ao limpar cache
+    } catch {
+      // Ignora erro ao limpar
     }
 
     const downloadResumable = FileSystem.createDownloadResumable(
@@ -146,10 +144,7 @@ export class UpdateService {
       destinoApk,
       {},
       (downloadProgress) => {
-        if (
-          downloadProgress.totalBytesExpectedToWrite > 0 &&
-          onProgress
-        ) {
+        if (downloadProgress.totalBytesExpectedToWrite > 0 && onProgress) {
           const perc = Math.round(
             (downloadProgress.totalBytesWritten /
               downloadProgress.totalBytesExpectedToWrite) *
@@ -165,24 +160,60 @@ export class UpdateService {
       throw new Error('Falha ao baixar o arquivo da atualização.');
     }
 
+    return resultado.uri;
+  }
+
+  /**
+   * Abre o instalador de pacotes nativo do Android para o APK baixado.
+   */
+  async instalarApk(localUri: string, fallbackUrl?: string): Promise<boolean> {
+    if (Platform.OS !== 'android') {
+      if (fallbackUrl) await Linking.openURL(fallbackUrl);
+      return false;
+    }
+
     try {
       // Obtém o content:// URI via FileProvider do Expo
-      const contentUri = await FileSystem.getContentUriAsync(resultado.uri);
+      const contentUri = await FileSystem.getContentUriAsync(localUri);
 
-      // Dispara o instalador de pacotes nativo do Android
+      // Dispara o instalador nativo com flags de leitura e NEW_TASK
       await IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
         data: contentUri,
-        flags: 1, // FLAG_GRANT_READ_URI_PERMISSION
+        flags: FLAGS_INTENT_INSTALACAO,
         type: 'application/vnd.android.package-archive',
       });
-    } catch (launcherError) {
-      console.warn(
-        'IntentLauncher falhou ao abrir APK, fazendo fallback para navegador:',
-        launcherError
-      );
-      // Fallback seguro: abre o link direto no navegador nativo
-      await Linking.openURL(apkUrl);
+      return true;
+    } catch (launcherError: any) {
+      console.warn('Erro ao disparar Intent de instalação do APK:', launcherError);
+
+      // Tenta abrir tela de permissão de fontes desconhecidas se for bloqueio de segurança
+      try {
+        await IntentLauncher.startActivityAsync(
+          'android.settings.MANAGE_UNKNOWN_APP_SOURCES',
+          {
+            data: 'package:com.examesimulado.detran',
+          }
+        );
+      } catch {
+        // Fallback para navegador
+        if (fallbackUrl) {
+          await Linking.openURL(fallbackUrl);
+        }
+      }
+      return false;
     }
+  }
+
+  /**
+   * Baixa e aciona a instalação diretamente.
+   */
+  async baixarEInstalarApk(
+    apkUrl: string,
+    onProgress?: (progresso: number) => void
+  ): Promise<string> {
+    const localUri = await this.baixarApk(apkUrl, onProgress);
+    await this.instalarApk(localUri, apkUrl);
+    return localUri;
   }
 }
 

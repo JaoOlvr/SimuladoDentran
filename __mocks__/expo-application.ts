@@ -1,5 +1,5 @@
-export const nativeApplicationVersion = '1.0.7';
-export const nativeBuildVersion = '8';
+export const nativeApplicationVersion = '1.0.8';
+export const nativeBuildVersion = '9';
 export const applicationId = 'com.examesimulado.detran';
 
 export default {

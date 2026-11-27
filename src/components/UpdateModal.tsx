@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   ScrollView,
   Alert,
+  Linking,
 } from 'react-native';
 import { ReleaseInfo, updateService } from '../features/updater/updateService';
 
@@ -17,33 +18,59 @@ interface UpdateModalProps {
   onClose: () => void;
 }
 
+type FaseUpdate = 'inicial' | 'baixando' | 'concluido';
+
 export function UpdateModal({ visible, release, onClose }: UpdateModalProps) {
-  const [baixando, setBaixando] = useState(false);
+  const [fase, setFase] = useState<FaseUpdate>('inicial');
   const [progresso, setProgresso] = useState(0);
+  const [localApkUri, setLocalApkUri] = useState<string | null>(null);
 
   if (!visible || !release) return null;
 
-  const handleAtualizar = async () => {
+  const handleIniciarDownload = async () => {
     if (!release.apkUrl) return;
 
-    setBaixando(true);
+    setFase('baixando');
     setProgresso(0);
 
     try {
-      await updateService.baixarEInstalarApk(release.apkUrl, (p) => {
+      const uri = await updateService.baixarApk(release.apkUrl, (p) => {
         setProgresso(p);
       });
-      // Fecha o modal após disparar o instalador
-      onClose();
+      setLocalApkUri(uri);
+      setFase('concluido');
+
+      // Tenta abrir o instalador imediatamente após o término do download
+      await updateService.instalarApk(uri, release.apkUrl);
     } catch (e: any) {
       console.error(e);
       Alert.alert(
-        'Erro no Download',
+        'Falha no Download',
         'Não foi possível concluir o download da atualização. Verifique sua conexão com a internet.'
       );
-    } finally {
-      setBaixando(false);
+      setFase('inicial');
     }
+  };
+
+  const handleTentarInstalarNovamente = async () => {
+    if (localApkUri) {
+      await updateService.instalarApk(localApkUri, release.apkUrl || undefined);
+    } else if (release.apkUrl) {
+      await updateService.baixarEInstalarApk(release.apkUrl);
+    }
+  };
+
+  const handleAbrirNavegador = async () => {
+    if (release.apkUrl) {
+      await Linking.openURL(release.apkUrl);
+      onClose();
+    }
+  };
+
+  const handleFechar = () => {
+    if (fase === 'baixando') return;
+    setFase('inicial');
+    onClose();
   };
 
   return (
@@ -51,9 +78,7 @@ export function UpdateModal({ visible, release, onClose }: UpdateModalProps) {
       transparent
       animationType="fade"
       visible={visible}
-      onRequestClose={() => {
-        if (!baixando) onClose();
-      }}
+      onRequestClose={handleFechar}
     >
       <View style={styles.overlay}>
         <View style={styles.container}>
@@ -66,20 +91,22 @@ export function UpdateModal({ visible, release, onClose }: UpdateModalProps) {
             </Text>
           </View>
 
-          {/* O que há de novo */}
-          <View style={styles.body}>
-            <Text style={styles.sectionTitle}>Novidades desta versão:</Text>
-            <ScrollView style={styles.notesScroll} nestedScrollEnabled>
-              <Text style={styles.notesText}>
-                {release.notas
-                  ? release.notas.slice(0, 450) + (release.notas.length > 450 ? '...' : '')
-                  : 'Melhorias de desempenho, correções de interface e atualização das diretrizes do DETRAN.'}
-              </Text>
-            </ScrollView>
-          </View>
+          {/* Estado Inicial ou Concluído */}
+          {fase === 'inicial' && (
+            <View style={styles.body}>
+              <Text style={styles.sectionTitle}>Novidades desta versão:</Text>
+              <ScrollView style={styles.notesScroll} nestedScrollEnabled>
+                <Text style={styles.notesText}>
+                  {release.notas
+                    ? release.notas.slice(0, 450) + (release.notas.length > 450 ? '...' : '')
+                    : 'Melhorias de desempenho, correções de interface e atualização das diretrizes do DETRAN.'}
+                </Text>
+              </ScrollView>
+            </View>
+          )}
 
-          {/* Barra de Progresso quando estiver baixando */}
-          {baixando && (
+          {/* Estado Baixando */}
+          {fase === 'baixando' && (
             <View style={styles.progressContainer}>
               <View style={styles.progressBarBackground}>
                 <View style={[styles.progressBarFill, { width: `${progresso}%` }]} />
@@ -87,35 +114,82 @@ export function UpdateModal({ visible, release, onClose }: UpdateModalProps) {
               <Text style={styles.progressText}>
                 Baixando atualização... {progresso}%
               </Text>
+              <Text style={styles.progressSubText}>
+                O arquivo está sendo transferido diretamente para o celular.
+              </Text>
+            </View>
+          )}
+
+          {/* Estado Concluído */}
+          {fase === 'concluido' && (
+            <View style={styles.concluidoContainer}>
+              <View style={styles.concluidoBadge}>
+                <Text style={styles.concluidoBadgeText}>✅ DOWNLOAD COMPLETO</Text>
+              </View>
+              <Text style={styles.concluidoTitle}>
+                Pronto para instalar a versão {release.tagName}
+              </Text>
+              <Text style={styles.concluidoText}>
+                Toque em "Instalar Agora". Se o Android solicitar, ative a opção "Permitir desta fonte" para o SimulaDetran concluir a instalação.
+              </Text>
             </View>
           )}
 
           {/* Botões de Ação */}
           <View style={styles.actions}>
-            <TouchableOpacity
-              style={[styles.btnPrimary, baixando && styles.btnDisabled]}
-              onPress={handleAtualizar}
-              disabled={baixando}
-              activeOpacity={0.8}
-            >
-              {baixando ? (
-                <View style={styles.btnLoadingRow}>
-                  <ActivityIndicator size="small" color="#FFFFFF" />
-                  <Text style={styles.btnPrimaryText}> Baixando ({progresso}%)...</Text>
-                </View>
-              ) : (
-                <Text style={styles.btnPrimaryText}>🚀 Atualizar Agora</Text>
-              )}
-            </TouchableOpacity>
+            {fase === 'inicial' && (
+              <>
+                <TouchableOpacity
+                  style={styles.btnPrimary}
+                  onPress={handleIniciarDownload}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.btnPrimaryText}>🚀 Baixar e Atualizar</Text>
+                </TouchableOpacity>
 
-            {!baixando && (
-              <TouchableOpacity
-                style={styles.btnSecondary}
-                onPress={onClose}
-                activeOpacity={0.7}
-              >
-                <Text style={styles.btnSecondaryText}>Lembrar Mais Tarde</Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.btnSecondary}
+                  onPress={handleFechar}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.btnSecondaryText}>Lembrar Mais Tarde</Text>
+                </TouchableOpacity>
+              </>
+            )}
+
+            {fase === 'baixando' && (
+              <View style={styles.btnLoadingRow}>
+                <ActivityIndicator size="small" color="#1E40AF" />
+                <Text style={styles.btnLoadingText}> Baixando ({progresso}%)...</Text>
+              </View>
+            )}
+
+            {fase === 'concluido' && (
+              <>
+                <TouchableOpacity
+                  style={styles.btnSuccess}
+                  onPress={handleTentarInstalarNovamente}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.btnPrimaryText}>📲 Instalar Agora</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.btnOutline}
+                  onPress={handleAbrirNavegador}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.btnOutlineText}>🌐 Instalar via Navegador</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.btnSecondary}
+                  onPress={handleFechar}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.btnSecondaryText}>Fechar</Text>
+                </TouchableOpacity>
+              </>
             )}
           </View>
         </View>
@@ -194,25 +268,66 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   progressContainer: {
-    marginBottom: 16,
+    marginBottom: 20,
+    paddingVertical: 10,
   },
   progressBarBackground: {
-    height: 8,
+    height: 10,
     backgroundColor: '#E2E8F0',
-    borderRadius: 4,
+    borderRadius: 5,
     overflow: 'hidden',
-    marginBottom: 6,
+    marginBottom: 8,
   },
   progressBarFill: {
     height: '100%',
     backgroundColor: '#059669',
-    borderRadius: 4,
+    borderRadius: 5,
   },
   progressText: {
-    fontSize: 11,
+    fontSize: 13,
     color: '#059669',
-    fontWeight: '700',
+    fontWeight: '800',
     textAlign: 'center',
+  },
+  progressSubText: {
+    fontSize: 11,
+    color: '#64748B',
+    textAlign: 'center',
+    marginTop: 4,
+  },
+  concluidoContainer: {
+    backgroundColor: '#F0FDF4',
+    borderRadius: 12,
+    padding: 14,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#BBF7D0',
+    alignItems: 'center',
+  },
+  concluidoBadge: {
+    backgroundColor: '#DCFCE7',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  concluidoBadgeText: {
+    color: '#15803D',
+    fontSize: 11,
+    fontWeight: '800',
+  },
+  concluidoTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: '#166534',
+    textAlign: 'center',
+    marginBottom: 6,
+  },
+  concluidoText: {
+    fontSize: 12,
+    color: '#14532D',
+    textAlign: 'center',
+    lineHeight: 18,
   },
   actions: {
     gap: 8,
@@ -223,8 +338,24 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
   },
-  btnDisabled: {
-    backgroundColor: '#94A3B8',
+  btnSuccess: {
+    backgroundColor: '#059669',
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  btnOutline: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1.5,
+    borderColor: '#1E40AF',
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  btnOutlineText: {
+    color: '#1E40AF',
+    fontSize: 14,
+    fontWeight: '700',
   },
   btnPrimaryText: {
     color: '#FFFFFF',
@@ -235,9 +366,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 12,
+  },
+  btnLoadingText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#1E40AF',
   },
   btnSecondary: {
-    paddingVertical: 10,
+    paddingVertical: 8,
     alignItems: 'center',
   },
   btnSecondaryText: {
