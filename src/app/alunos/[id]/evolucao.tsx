@@ -65,37 +65,81 @@ export default function AlunoEvolucaoScreen() {
   );
 
   const handleCompartilharSimulado = async (sim: SimuladoDb) => {
-    setGerandoPdfId(sim.id);
-    try {
-      const eventosDb = await eventosRepository.listarPorSimulado(sim.id);
-      const perfil = getPerfilPorUf('MA');
+    Alert.alert(
+      'Compartilhar Simulado',
+      `Como deseja compartilhar este simulado com ${aluno?.nome || 'o aluno'}?`,
+      [
+        {
+          text: '📱 WhatsApp (Resumo)',
+          onPress: async () => {
+            try {
+              const eventosDb = await eventosRepository.listarPorSimulado(sim.id);
+              const eventosAtivos = eventosDb.filter((e) => !e.desfeito);
+              const dataHora = new Date(sim.iniciado_em).toLocaleString('pt-BR');
 
-      const uri = await relatorioService.gerarPdf({
-        simulado: sim,
-        aluno,
-        perfil,
-        eventos: eventosDb.map((e) => ({
-          id: e.id,
-          simulado_id: e.simulado_id,
-          tipo_evento: e.tipo_evento,
-          infracao_id: e.infracao_id || undefined,
-          natureza_snapshot: e.natureza_snapshot as any,
-          pontos_snapshot: e.pontos_snapshot,
-          descricao_snapshot: e.descricao_snapshot,
-          submotivo: e.submotivo || undefined,
-          timestamp_evento: e.timestamp_evento,
-          desfeito: e.desfeito,
-        })),
-        nomeInstrutor: 'Instrutor Detran-MA',
-      });
+              const texto = relatorioService.gerarMensagemWhatsApp({
+                alunoNome: aluno ? aluno.nome : 'Aluno',
+                categoria: sim.categoria,
+                tipoCambio: sim.tipo_cambio,
+                status: sim.status,
+                pontosTotais: sim.pontos_totais,
+                limiteAprovacao: 10,
+                motivoEncerramento: sim.motivo_encerramento,
+                dataHora,
+                infracoes: eventosAtivos.map((e) => ({
+                  descricao: e.descricao_snapshot,
+                  pontos: e.pontos_snapshot,
+                  submotivo: e.submotivo || undefined,
+                })),
+                observacoes: sim.observacoes_instrutor || undefined,
+              });
 
-      await relatorioService.compartilhar(uri, aluno?.nome || 'Aluno');
-    } catch (e) {
-      console.error(e);
-      Alert.alert('Erro', 'Não foi possível gerar ou compartilhar o relatório.');
-    } finally {
-      setGerandoPdfId(null);
-    }
+              await relatorioService.abrirWhatsAppComTexto(aluno?.telefone, texto);
+            } catch (e) {
+              console.error(e);
+              Alert.alert('Erro', 'Não foi possível abrir o WhatsApp.');
+            }
+          },
+        },
+        {
+          text: '📄 Arquivo PDF',
+          onPress: async () => {
+            setGerandoPdfId(sim.id);
+            try {
+              const eventosDb = await eventosRepository.listarPorSimulado(sim.id);
+              const perfil = getPerfilPorUf('MA');
+
+              const uri = await relatorioService.gerarPdf({
+                simulado: sim,
+                aluno,
+                perfil,
+                eventos: eventosDb.map((e) => ({
+                  id: e.id,
+                  simulado_id: e.simulado_id,
+                  tipo_evento: e.tipo_evento,
+                  infracao_id: e.infracao_id || undefined,
+                  natureza_snapshot: e.natureza_snapshot as any,
+                  pontos_snapshot: e.pontos_snapshot,
+                  descricao_snapshot: e.descricao_snapshot,
+                  submotivo: e.submotivo || undefined,
+                  timestamp_evento: e.timestamp_evento,
+                  desfeito: e.desfeito,
+                })),
+                nomeInstrutor: 'Instrutor Detran-MA',
+              });
+
+              await relatorioService.compartilhar(uri, aluno?.nome || 'Aluno');
+            } catch (e) {
+              console.error(e);
+              Alert.alert('Erro', 'Não foi possível gerar o PDF.');
+            } finally {
+              setGerandoPdfId(null);
+            }
+          },
+        },
+        { text: 'Cancelar', style: 'cancel' },
+      ]
+    );
   };
 
   if (carregando) {

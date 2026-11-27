@@ -12,12 +12,18 @@ import { useAuthStore } from '../../features/auth/authStore';
 import { syncService } from '../../data/sync/syncService';
 import { BigActionButton } from '../../components/BigActionButton';
 import { getPerfisEstaduais } from '../../core/rules/loader';
+import { updateService, ReleaseInfo } from '../../features/updater/updateService';
+import { UpdateModal } from '../../components/UpdateModal';
 
 export default function ConfiguracoesScreen() {
   const { usuario, modoOffline, ufPadrao, setUfPadrao } = useAuthStore();
   const [totalPendentes, setTotalPendentes] = useState(0);
   const [sincronizando, setSincronizando] = useState(false);
+  const [checandoUpdate, setChecandoUpdate] = useState(false);
+  const [releaseInfo, setReleaseInfo] = useState<ReleaseInfo | null>(null);
+  const [modalUpdateVisivel, setModalUpdateVisivel] = useState(false);
 
+  const versaoAtual = updateService.obterVersaoAtual();
   const perfis = getPerfisEstaduais();
 
   const atualizarFila = useCallback(async () => {
@@ -50,6 +56,35 @@ export default function ConfiguracoesScreen() {
     }
   };
 
+  const handleVerificarAtualizacao = async () => {
+    setChecandoUpdate(true);
+    try {
+      const info = await updateService.verificarAtualizacao();
+      if (!info) {
+        Alert.alert(
+          'Sem Conexão',
+          'Não foi possível verificar atualizações no momento. Verifique sua conexão com a internet.'
+        );
+        return;
+      }
+
+      if (info.temAtualizacao) {
+        setReleaseInfo(info);
+        setModalUpdateVisivel(true);
+      } else {
+        Alert.alert(
+          'Aplicativo Atualizado',
+          `Você já está utilizando a versão mais recente (${info.versaoAtual}) com todas as correções de ícones e regras do DETRAN.`
+        );
+      }
+    } catch (e) {
+      console.error(e);
+      Alert.alert('Erro', 'Ocorreu um erro ao consultar atualizações.');
+    } finally {
+      setChecandoUpdate(false);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
@@ -62,6 +97,22 @@ export default function ConfiguracoesScreen() {
               {modoOffline ? '⚡ MODO VEICULAR OFFLINE ATIVO' : '🌐 CONECTADO ONLINE'}
             </Text>
           </View>
+        </View>
+
+        {/* Atualização do Aplicativo */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Atualização do Aplicativo</Text>
+          <Text style={styles.cardSubtitle}>
+            Versão instalada: v{versaoAtual} (Canal Oficial GitHub)
+          </Text>
+
+          <BigActionButton
+            title="Verificar Novas Atualizações"
+            variant="outline"
+            minHeight={46}
+            loading={checandoUpdate}
+            onPress={handleVerificarAtualizacao}
+          />
         </View>
 
         {/* Painel da Fila de Sincronização */}
@@ -134,6 +185,13 @@ export default function ConfiguracoesScreen() {
           </Text>
         </View>
       </ScrollView>
+
+      {/* Modal de Atualização */}
+      <UpdateModal
+        visible={modalUpdateVisivel}
+        release={releaseInfo}
+        onClose={() => setModalUpdateVisivel(false)}
+      />
     </SafeAreaView>
   );
 }

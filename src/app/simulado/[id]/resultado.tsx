@@ -58,6 +58,41 @@ export default function ResultadoSimuladoScreen() {
     }
   };
 
+  const handleEnviarWhatsApp = async () => {
+    if (!simuladoAtual) return;
+    try {
+      if (observacoes !== simuladoAtual.observacoes_instrutor) {
+        await finalizarSimulado(observacoes);
+      }
+
+      const eventosAtivos = eventos.filter((e) => !e.desfeito);
+      const dataHoraFormatada = new Date(simuladoAtual.iniciado_em).toLocaleString('pt-BR');
+
+      const texto = relatorioService.gerarMensagemWhatsApp({
+        alunoNome: alunoAtual ? alunoAtual.nome : 'Simulado Rápido',
+        categoria: simuladoAtual.categoria,
+        tipoCambio: simuladoAtual.tipo_cambio,
+        status: estadoCalculado.status,
+        pontosTotais: estadoCalculado.pontos_totais,
+        limiteAprovacao: estadoCalculado.limite_aprovacao,
+        motivoEncerramento: estadoCalculado.motivo_encerramento,
+        dataHora: dataHoraFormatada,
+        infracoes: eventosAtivos.map((e) => ({
+          descricao: e.descricao_snapshot,
+          pontos: e.pontos_snapshot,
+          submotivo: e.submotivo,
+        })),
+        observacoes: observacoes || simuladoAtual.observacoes_instrutor || undefined,
+      });
+
+      const telefone = alunoAtual?.telefone;
+      await relatorioService.abrirWhatsAppComTexto(telefone, texto);
+    } catch (e) {
+      console.error(e);
+      Alert.alert('Erro', 'Não foi possível abrir o WhatsApp.');
+    }
+  };
+
   const handleGerarECompartilharPdf = async () => {
     if (!simuladoAtual) return;
     setGerandoPdf(true);
@@ -232,18 +267,26 @@ export default function ResultadoSimuladoScreen() {
         {/* Botões de Ação */}
         <View style={styles.actionButtons}>
           <BigActionButton
-            title="Gerar PDF e Enviar no WhatsApp"
+            title={alunoAtual?.telefone ? `📱 Enviar no WhatsApp de ${alunoAtual.nome.split(' ')[0]}` : "📱 Enviar no WhatsApp"}
             variant="success"
-            minHeight={60}
+            minHeight={58}
+            onPress={handleEnviarWhatsApp}
+            style={{ marginBottom: 10 }}
+          />
+
+          <BigActionButton
+            title="📄 Compartilhar Relatório PDF"
+            variant="outline"
+            minHeight={54}
             loading={gerandoPdf}
             onPress={handleGerarECompartilharPdf}
-            style={{ marginBottom: 12 }}
+            style={{ marginBottom: 10 }}
           />
 
           <BigActionButton
             title="Voltar ao Início"
             variant="primary"
-            minHeight={58}
+            minHeight={54}
             onPress={() => router.replace('/')}
           />
         </View>

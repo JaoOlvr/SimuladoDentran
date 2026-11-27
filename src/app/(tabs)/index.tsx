@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { router } from 'expo-router';
 import { BigActionButton } from '../../components/BigActionButton';
 import { useSimuladoStore } from '../../features/simulado/simuladoStore';
+import { updateService, ReleaseInfo } from '../../features/updater/updateService';
+import { UpdateModal } from '../../components/UpdateModal';
 
 export default function HomeScreen() {
   const iniciarNovoSimulado = useSimuladoStore((s) => s.iniciarNovoSimulado);
+  const [releaseInfo, setReleaseInfo] = useState<ReleaseInfo | null>(null);
+  const [modalUpdateVisivel, setModalUpdateVisivel] = useState(false);
+
+  useEffect(() => {
+    // Checagem automática silenciosa na abertura
+    const checarAtualizacoes = async () => {
+      try {
+        const info = await updateService.verificarAtualizacao();
+        if (info && info.temAtualizacao) {
+          setReleaseInfo(info);
+          setModalUpdateVisivel(true);
+        }
+      } catch {
+        // Silencioso em caso de falha de rede/offline
+      }
+    };
+
+    checarAtualizacoes();
+  }, []);
 
   const handleSimuladoRapido = async () => {
     try {
@@ -73,6 +94,13 @@ export default function HomeScreen() {
           style={{ marginTop: 8 }}
         />
       </ScrollView>
+
+      {/* Modal de Auto-atualização */}
+      <UpdateModal
+        visible={modalUpdateVisivel}
+        release={releaseInfo}
+        onClose={() => setModalUpdateVisivel(false)}
+      />
     </SafeAreaView>
   );
 }
