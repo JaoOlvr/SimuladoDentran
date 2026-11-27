@@ -1,6 +1,6 @@
 {
   "name": "simuladetran",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
@@ -23,6 +23,7 @@
     "expo": "~52.0.25",
     "expo-asset": "~11.0.5",
     "expo-constants": "~17.0.3",
+    "expo-font": "~13.0.4",
     "expo-haptics": "~14.0.0",
     "expo-linking": "~7.0.4",
     "expo-print": "~14.0.2",

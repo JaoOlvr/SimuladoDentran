@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { View, Text } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function TabLayout() {
   return (
@@ -35,6 +35,13 @@ export default function TabLayout() {
           title: 'Simulados',
           tabBarLabel: 'Início',
           headerTitle: 'SimulaDetran',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? 'car-sport' : 'car-sport-outline'}
+              size={size || 24}
+              color={color}
+            />
+          ),
         }}
       />
       <Tabs.Screen
@@ -43,6 +50,13 @@ export default function TabLayout() {
           title: 'Alunos',
           tabBarLabel: 'Alunos',
           headerTitle: 'Gestão de Alunos',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? 'people' : 'people-outline'}
+              size={size || 24}
+              color={color}
+            />
+          ),
         }}
       />
       <Tabs.Screen
@@ -51,9 +65,15 @@ export default function TabLayout() {
           title: 'Configurações',
           tabBarLabel: 'Ajustes / LGPD',
           headerTitle: 'Configurações e LGPD',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? 'settings' : 'settings-outline'}
+              size={size || 24}
+              color={color}
+            />
+          ),
         }}
       />
     </Tabs>
   );
 }
-
