@@ -44,7 +44,7 @@ export function compararVersoes(v1: string, v2: string): number {
 }
 
 const GITHUB_REPO = 'JaoOlvr/SimuladoDentran';
-export const VERSAO_FALLBACK = '1.0.8';
+export const VERSAO_FALLBACK = '1.0.9';
 
 // Flags nativas do Intent Android
 // FLAG_GRANT_READ_URI_PERMISSION (1) | FLAG_ACTIVITY_NEW_TASK (0x10000000 = 268435456)
